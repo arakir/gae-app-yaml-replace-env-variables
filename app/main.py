@@ -20,12 +20,12 @@ def replace_env_variables_in_app_yaml_file():
         if env_var.startswith("$"):
             repl_env_var = os.environ.get(env_var[1:])
             if repl_env_var is not None:
-                yaml_data["env_variables"][key] = repl_env_var
+                yaml_data["env_variables"][key] = repl_env_var.encode('unicode_escape').decode()
             else:
                 raise Exception(f"cannot find the env-variable {env_var[1:]} in \"env\" section in github workflow")
 
     with open(yaml_file, "w") as stream:
-        yaml.dump(json.dumps(yaml_data, ensure_ascii=False), stream, width=float("inf"))
+        yaml.dump(yaml_data, stream, width=float("inf"))
 
 
 if __name__ == "__main__":
